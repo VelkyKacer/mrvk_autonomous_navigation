@@ -1,0 +1,78 @@
+<?xml version="1.0"?>
+<robot name="shoddy" xmlns:xacro="http://www.ros.org/wiki/xacro">
+    <xacro:macro name="lidar_macro" params="name parent">
+        <!-- Properties -->
+        <xacro:property name="size_x" value="0.03"/>
+        <xacro:property name="size_y" value="0.03"/>
+        <xacro:property name="size_z" value="0.04"/>
+        
+        <xacro:property name="origin_x" value="0.20"/>
+        <xacro:property name="origin_y" value="0.0"/>
+        <xacro:property name="origin_z" value="0.09"/>
+
+
+
+        <!-- Link -->
+        <link name="${name}">
+            <visual>
+                <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+                <geometry>
+                    <mesh filename="file://$(find sim_pkg)/meshes/lidar/lidar.stl"/>
+                </geometry>
+            </visual>
+            <!-- Instead of box, its possible to use the same stl file for collision -->
+            <collision>
+                <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+                <geometry>
+                    <box size="${size_x} ${size_y} ${size_z}"/>
+                </geometry>
+            </collision>
+
+            <inertial>
+                <mass value="0.1"/>
+                <origin xyz="0 0 0" rpy="0 0 0"/>
+                <inertia ixx="1e-5" ixy="0" ixz="0" iyy="1e-5" iyz="0" izz="1e-5"/>
+            </inertial>
+        </link>
+
+        <joint name="sensor_laser_joint" type="fixed">
+            <origin xyz="${origin_x} ${origin_y} ${origin_z}" rpy="0.0 0.0 0.0"/>
+            <parent link="${parent}"/>
+            <child link="${name}"/>   
+        </joint>
+
+    
+        <gazebo reference="${name}">
+            <material>Gazebo/Black</material>
+
+            
+            <sensor name='gpu_lidar' type='gpu_lidar'>
+                <always_on>true</always_on>
+                <visualize>true</visualize>
+                <pose>0 0 0 0 0 0</pose>
+                <update_rate>40</update_rate>
+                <topic>scan</topic>
+                <gz_frame_id>sensor_laser_link</gz_frame_id>   
+                <lidar>
+                    <scan>
+                        <horizontal>
+                            <samples>1080</samples>
+                            <resolution>1</resolution>
+                            <min_angle>-2.356</min_angle>
+                            <max_angle>2.356</max_angle>
+                        </horizontal>
+                    </scan>
+                    <range>
+                        <min>0.1</min>
+                        <max>30.0</max>
+                        <resolution>0.01</resolution>
+                    </range>
+                </lidar>
+            </sensor>
+
+        </gazebo> 
+    </xacro:macro>
+
+
+
+</robot>   

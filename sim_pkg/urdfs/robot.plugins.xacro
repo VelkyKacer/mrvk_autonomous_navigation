@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<robot> 
+    <gazebo>
+        <plugin filename="gz-sim-diff-drive-system" name="gz::sim::systems::DiffDrive">
+        <left_joint>wheel_left_front_to_base_joint</left_joint>
+        <left_joint>wheel_left_rear_to_base_joint</left_joint>
+        <right_joint>wheel_right_front_to_base_joint</right_joint>
+        <right_joint>wheel_right_rear_to_base_joint</right_joint>
+        <wheel_separation>0.48</wheel_separation>
+        <wheel_radius>0.115</wheel_radius>
+        <topic>diff_drive_controller/cmd_vel</topic>
+        <odom_topic>odom</odom_topic>
+        <frame_id>odom</frame_id>
+        <child_frame_id>base_link</child_frame_id>
+        <tf_topic>/tf</tf_topic> 
+        <odom_publish_frequency>50</odom_publish_frequency>
+        </plugin>
+        <plugin filename="gz-sim-joint-state-publisher-system" name="gz::sim::systems::JointStatePublisher">
+        <joint_name>wheel_left_front_to_base_joint</joint_name>
+        <joint_name>wheel_left_rear_to_base_joint</joint_name>
+        <joint_name>wheel_right_front_to_base_joint</joint_name>
+        <joint_name>wheel_right_rear_to_base_joint</joint_name>
+        </plugin>
+    </gazebo>
+</robot>
